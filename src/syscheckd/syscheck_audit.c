@@ -1389,7 +1389,6 @@ int filterkey_audit_events(char *buffer) {
 }
 
 
-// LCOV_EXCL_START
 // Audit healthcheck before starting the main thread
 int audit_health_check(int audit_socket) {
     int retval;
@@ -1455,7 +1454,6 @@ exit_err:
     hc_thread_active = 0;
     return -1;
 }
-// LCOV_EXCL_STOP
 
 #endif
 #endif
