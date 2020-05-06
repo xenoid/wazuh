@@ -1439,7 +1439,7 @@ int audit_health_check(int audit_socket) {
     unlink(AUDIT_HEALTHCHECK_FILE);
 
     if(retval = audit_delete_rule(AUDIT_HEALTHCHECK_DIR, AUDIT_HEALTHCHECK_KEY), retval <= 0){
-        mdebug1(FIM_HEALTHCHECK_CHECK_RULE);
+        mdebug1(FIM_HEALTHCHECK_CHECK_RULE);    // LCOV_EXCL_LINE
     }
     hc_thread_active = 0;
 
@@ -1449,7 +1449,7 @@ int audit_health_check(int audit_socket) {
 
 exit_err:
     if(retval = audit_delete_rule(AUDIT_HEALTHCHECK_DIR, AUDIT_HEALTHCHECK_KEY), retval <= 0){
-        mdebug1(FIM_HEALTHCHECK_CHECK_RULE);
+        mdebug1(FIM_HEALTHCHECK_CHECK_RULE);    // LCOV_EXCL_LINE
     }
     hc_thread_active = 0;
     return -1;
