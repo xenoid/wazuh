@@ -527,6 +527,7 @@ static void test_fim_json_event(void **state) {
                     1,
                     FIM_MODIFICATION,
                     FIM_REALTIME,
+                    NULL,
                     NULL
                 );
 
@@ -580,9 +581,6 @@ static void test_fim_json_event_whodata(void **state) {
     will_return(__wrap_fim_db_get_paths_from_inode, NULL);
     #endif
 
-    expect_string(__wrap_seechanges_addfile, filename, "test.file");
-    will_return(__wrap_seechanges_addfile, strdup("diff"));
-
     fim_data->json = fim_json_event(
         "test.file",
         fim_data->old_data,
@@ -590,7 +588,8 @@ static void test_fim_json_event_whodata(void **state) {
         1,
         FIM_MODIFICATION,
         FIM_WHODATA,
-        fim_data->w_evt
+        fim_data->w_evt,
+        "diff"
     );
 
     syscheck.opts[1] &= ~CHECK_SEECHANGES;
@@ -637,6 +636,7 @@ static void test_fim_json_event_no_changes(void **state) {
                         1,
                         FIM_MODIFICATION,
                         FIM_WHODATA,
+                        NULL,
                         NULL
                     );
 
@@ -665,6 +665,7 @@ static void test_fim_json_event_hardlink_one_path(void **state) {
                     1,
                     FIM_MODIFICATION,
                     FIM_REALTIME,
+                    NULL,
                     NULL
                 );
 
@@ -727,6 +728,7 @@ static void test_fim_json_event_hardlink_two_paths(void **state) {
                     1,
                     FIM_MODIFICATION,
                     FIM_REALTIME,
+                    NULL,
                     NULL
                 );
 
@@ -1354,6 +1356,9 @@ static void test_fim_file_add(void **state) {
     expect_string(__wrap_fim_db_get_path, file_path, "file");
     will_return(__wrap_fim_db_get_path, NULL);
 
+    expect_string(__wrap_seechanges_addfile, filename, "file");
+    will_return(__wrap_seechanges_addfile, strdup("diff"));
+
     expect_value(__wrap_fim_db_insert, fim_sql, syscheck.database);
     expect_string(__wrap_fim_db_insert, file_path, "file");
     will_return(__wrap_fim_db_insert, 0);
@@ -1363,7 +1368,7 @@ static void test_fim_file_add(void **state) {
     will_return(__wrap_fim_db_set_scanned, 0);
 
     expect_string(__wrap_seechanges_addfile, filename, "file");
-    will_return(__wrap_seechanges_addfile, strdup("diff"));
+    will_return(__wrap_seechanges_addfile, NULL);
 
     ret = fim_file("file", fim_data->item, NULL, 1);
 
